@@ -1,12 +1,6 @@
 import { Note, NoteTag } from "@/types/note";
 import { User } from "@/types/user";
-import axios from "axios";
-
-
-axios.defaults.baseURL = "https://notehub-public.goit.study/api";
-axios.defaults.headers.common.Authorization = `Bearer ${
-  process.env.NEXT_PUBLIC_NOTEHUB_TOKEN
-}`;
+import { api } from "./api";
 
 interface FetchNotesResponse {
   notes: Note[];
@@ -24,16 +18,15 @@ interface NewNote {
 export const fetchNotes = async (
   searchText: string,
   page: number,
-    tag?: NoteTag
- 
+  tag?: NoteTag,
 ): Promise<FetchNotesResponse> => {
-  const response = await axios.get<FetchNotesResponse>("/notes", {
+  const response = await api.get<FetchNotesResponse>("/notes", {
     params: {
       page,
       perPage: 10,
       ...(searchText && { search: searchText }),
-       ...(tag && { tag }),
-         },
+      ...(tag && { tag }),
+    },
   });
 
   return {
@@ -42,21 +35,20 @@ export const fetchNotes = async (
   };
 };
 
-export const fetchNoteById =async (id: Note["id"]): Promise<Note> => {
-  const response = await axios.get<Note>(`/notes/${id}`);
+export const fetchNoteById = async (id: Note["id"]): Promise<Note> => {
+  const response = await api.get<Note>(`/notes/${id}`);
   return response.data;
-}
+};
 
 export const createNote = async (newNote: NewNote): Promise<Note> => {
-  const response = await axios.post<Note>("/notes", newNote);
+  const response = await api.post<Note>("/notes", newNote);
   return response.data;
 };
 
 export const deleteNote = async (noteId: string): Promise<Note> => {
-  const response = await axios.delete<Note>(`/notes/${noteId}`);
+  const response = await api.delete<Note>(`/notes/${noteId}`);
   return response.data;
 };
-
 
 // реєстрація нового користувача
 export type RegisterRequest = {
@@ -64,17 +56,14 @@ export type RegisterRequest = {
   password: string;
 };
 
-export const register = async (payload: RegisterRequest) : Promise<User> => {
-  const { data } = await axios.post<User>('/auth/register', payload, {
-    withCredentials: true,
-    headers: {
-       
+export const register = async (payload: RegisterRequest): Promise<User> => {
+  const { data } = await api.post<User>("/auth/register", payload, {
+       headers: {
       "Content-Type": "application/json",
     },
-  })
+  });
   return data;
 };
-
 
 // login
 
@@ -84,18 +73,17 @@ export type LoginRequest = {
 };
 
 export const login = async (payload: LoginRequest): Promise<User> => {
-  const { data } = await axios.post<User>('/auth/login', payload , {
-    withCredentials: true,
-    headers: {
-             "Content-Type": "application/json",
+  const { data } = await api.post<User>("/auth/login", payload, {
+        headers: {
+      "Content-Type": "application/json",
     },
-  })  
+  });
   return data;
 };
 
 // logout    для правильного виходу користувача
 export const logout = async (): Promise<void> => {
-  await axios.post('/auth/logout');
+  await api.post("/auth/logout");
 };
 
 // checkSession  Перевірка авторизації
@@ -104,20 +92,22 @@ type CheckSessionRequest = {
 };
 
 export const checkSession = async () => {
-  const { data }  = await axios.get<CheckSessionRequest>('/auth/session');
+  const { data } = await api.get<CheckSessionRequest>("/auth/session");
   return data.success;
 };
 
-
-
-
-// getMe
 export const getMe = async () => {
-  const { data } = await axios.get<User>('/auth/me');
+  const { data } = await api.get<User>("/auth/me");
   return data;
 };
 
+export type UpdateMeRequest = {
+  username: string;
+};
 
-// updateMe
-
-
+export const updateMe = async (
+  payload: UpdateMeRequest,
+): Promise<User> => {
+  const { data } = await api.patch<User>("/auth/me", payload);
+  return data;
+};

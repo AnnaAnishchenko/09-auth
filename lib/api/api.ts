@@ -1,16 +1,15 @@
 import axios from "axios";
 
-axios.defaults.baseURL = "https://localhost:3000/api";
-axios.defaults.headers.common.Authorization = `Bearer ${
-  process.env.NEXT_PUBLIC_NOTEHUB_TOKEN
-}`;
-
+export const api = axios.create({
+  baseURL: "https://notehub-public.goit.study/api",
+  withCredentials: true,
+  headers: {
+    Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`,
+    "Content-Type": "application/json",
+  },
+});
 
 // axios.defaults.baseURL = "https://notehub-public.goit.study/api";
 // axios.defaults.headers.common.Authorization = `Bearer ${
 //   process.env.NEXT_PUBLIC_NOTEHUB_TOKEN
 // }`;
-
-// для створення одного спільного екземпляра axios, 
-// з налаштуванням withCredentials: true для підтримки cookies
-// withCredentials: true,
