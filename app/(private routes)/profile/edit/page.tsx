@@ -1,11 +1,11 @@
 "use client";
 
-import css from "./EditProfilePage.module.css"
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getMe, updateMe } from "@/lib/api/clientApi";
 import { User } from "@/types/user";
+import Image from "next/image";
+import css from "./EditProfilePage.module.css"
 
 const EditProfile = () => {
   const router = useRouter();
