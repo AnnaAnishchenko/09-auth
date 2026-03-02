@@ -10,10 +10,11 @@ import { fetchNotes } from '@/lib/api/clientApi';
 import type { NoteTag } from "@/types/note";
 
 import Link from "next/link";
+import NoteList from "@/components/NoteList/NoteList";
+import Pagination from "@/components/Pagination/Pagination";
+import SearchBox from "@/components/SearchBox/SearchBox";
 
-import SearchBox from "@/app/components/SearchBox/SearchBox";
-import Pagination from "@/app/components/Pagination/Pagination";
-import NoteList from "@/app/components/NoteList/NoteList";
+
 
 interface NotesClientProps {
   tag?: NoteTag;
