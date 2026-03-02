@@ -2,7 +2,7 @@
 
 import css from "./NoteForm.module.css";
 import { useRouter } from "next/navigation";
-import { createNote } from "@/lib/api";
+import { createNote } from '@/lib/api/clientApi';
 import { useState } from "react";
 import type { NoteTag } from "@/types/note";
 

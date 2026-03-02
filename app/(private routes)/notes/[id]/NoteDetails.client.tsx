@@ -1,6 +1,6 @@
 
 "use client"
-import {fetchNoteById} from "@/lib/api";
+import { fetchNoteById } from '@/lib/api/clientApi';
 import css from '../filter/[...slug]/Notes.module.css';
 
 import { useParams } from "next/navigation";
