@@ -5,10 +5,13 @@ import { useState } from "react";
 import { register } from "@/lib/api/clientApi";
 import { ApiError } from "@/app/api/api";
 import css from "./SignUpPage.module.css";
+import { useAuthStore } from "@/lib/store/authStore";
 
 const SignUp = () => {
   const router = useRouter();
   const [error, setError] = useState("");
+
+  const setUser = useAuthStore((state) => state.setUser);
 
   const handleSubmit = async (formData: FormData) => {
     try {
@@ -16,7 +19,10 @@ const SignUp = () => {
       const password = formData.get("password") as string;
 
       await register({ email, password });
-       router.push('/profile');
+
+      setUser({ email, username: email.split("@")[0], avatar: "" });
+
+      router.push("/profile");
     } catch (error) {
       setError(
         (error as ApiError).response?.data?.error ??

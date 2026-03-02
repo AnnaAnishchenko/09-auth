@@ -5,10 +5,13 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { login } from "@/lib/api/clientApi";
 import { ApiError } from "@/app/api/api";
+import { useAuthStore } from "@/lib/store/authStore";
 
 const SignIn = () => {
   const router = useRouter();
   const [error, setError] = useState("");
+
+  const setUser = useAuthStore((state) => state.setUser);
 
   const handleSubmit = async (formData: FormData) => {
     try {
@@ -16,7 +19,10 @@ const SignIn = () => {
       const password = formData.get("password") as string;
 
       await login({ email, password });
-      router.push('/profile');
+
+      setUser({ email, username: email.split("@")[0], avatar: "" });
+
+      router.push("/profile");
     } catch (error) {
       setError(
         (error as ApiError).response?.data?.error ??

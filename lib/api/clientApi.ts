@@ -93,9 +93,31 @@ export const login = async (payload: LoginRequest): Promise<User> => {
   return data;
 };
 
-// logout
-// checkSession
+// logout    для правильного виходу користувача
+export const logout = async (): Promise<void> => {
+  await axios.post('/auth/logout');
+};
+
+// checkSession  Перевірка авторизації
+type CheckSessionRequest = {
+  success: boolean;
+};
+
+export const checkSession = async () => {
+  const { data }  = await axios.get<CheckSessionRequest>('/auth/session');
+  return data.success;
+};
+
+
+
+
 // getMe
+export const getMe = async () => {
+  const { data } = await axios.get<User>('/auth/me');
+  return data;
+};
+
+
 // updateMe
 
 
