@@ -1,6 +1,6 @@
 "use client";
 
-import css from "./ProfileEdit.module.css";
+import css from "./EditProfilePage.module.css"
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
