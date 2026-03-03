@@ -20,7 +20,7 @@ const AuthProvider = ({ children }: Props) => {
         const isAuthenticated = await checkSession();
 
         if (isAuthenticated) {
-          clearIsAuthenticated();
+         
           return;
         }
 
