@@ -6,11 +6,14 @@ import { getMe, updateMe } from "@/lib/api/clientApi";
 import { User } from "@/types/user";
 import Image from "next/image";
 import css from "./EditProfilePage.module.css"
+import { useAuthStore } from "@/lib/store/authStore";
 
 const EditProfile = () => {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [username, setUsername] = useState("");
+
+    const setUserToStore = useAuthStore((state) => state.setUser);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -22,10 +25,12 @@ const EditProfile = () => {
     fetchUser();
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await updateMe({ username });
+   const updatedUser =  await updateMe({ username });
+
+   setUserToStore(updatedUser);
 
     router.push("/profile");
   };

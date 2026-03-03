@@ -57,11 +57,8 @@ export type RegisterRequest = {
 };
 
 export const register = async (payload: RegisterRequest): Promise<User> => {
-  const { data } = await api.post<User>("/auth/register", payload, {
-       headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  const { data } = await api.post<User>("/auth/register", payload);
+
   return data;
 };
 
@@ -74,7 +71,7 @@ export type LoginRequest = {
 
 export const login = async (payload: LoginRequest): Promise<User> => {
   const { data } = await api.post<User>("/auth/login", payload, {
-        headers: {
+    headers: {
       "Content-Type": "application/json",
     },
   });
@@ -97,7 +94,7 @@ export const checkSession = async () => {
 };
 
 export const getMe = async () => {
-  const { data } = await api.get<User>("/auth/me");
+  const { data } = await api.get<User>("/users/me");
   return data;
 };
 
@@ -105,9 +102,7 @@ export type UpdateMeRequest = {
   username: string;
 };
 
-export const updateMe = async (
-  payload: UpdateMeRequest,
-): Promise<User> => {
-  const { data } = await api.patch<User>("/auth/me", payload);
+export const updateMe = async (payload: UpdateMeRequest): Promise<User> => {
+  const { data } = await api.patch<User>("/users/me", payload);
   return data;
 };
