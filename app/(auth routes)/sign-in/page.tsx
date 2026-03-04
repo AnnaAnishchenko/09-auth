@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { login } from "@/lib/api/clientApi";
 import { useAuthStore } from "@/lib/store/authStore";
-import { ApiError } from "@/app/api/api";
+import { ApiError } from "@/lib/api/api";
+
 
 const SignIn = () => {
   const router = useRouter();

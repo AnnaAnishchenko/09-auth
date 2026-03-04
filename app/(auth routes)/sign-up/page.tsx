@@ -3,9 +3,10 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { register } from "@/lib/api/clientApi";
-import { ApiError } from "@/app/api/api";
+
 import css from "./SignUpPage.module.css";
 import { useAuthStore } from "@/lib/store/authStore";
+import { ApiError } from "@/lib/api/api";
 
 const SignUp = () => {
   const router = useRouter();
