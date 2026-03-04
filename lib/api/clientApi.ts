@@ -1,6 +1,6 @@
 import { Note, NoteTag } from "@/types/note";
 import { User } from "@/types/user";
-import { api } from "./api";
+import { nextServer } from "./api";
 
 interface FetchNotesResponse {
   notes: Note[];
@@ -20,7 +20,7 @@ export const fetchNotes = async (
   page: number,
   tag?: NoteTag,
 ): Promise<FetchNotesResponse> => {
-  const response = await api.get<FetchNotesResponse>("/notes", {
+  const response = await nextServer.get<FetchNotesResponse>("/notes", {
     params: {
       page,
       perPage: 12,
@@ -36,17 +36,17 @@ export const fetchNotes = async (
 };
 
 export const fetchNoteById = async (id: Note["id"]): Promise<Note> => {
-  const response = await api.get<Note>(`/notes/${id}`);
+  const response = await nextServer.get<Note>(`/notes/${id}`);
   return response.data;
 };
 
 export const createNote = async (newNote: NewNote): Promise<Note> => {
-  const response = await api.post<Note>("/notes", newNote);
+  const response = await nextServer.post<Note>("/notes", newNote);
   return response.data;
 };
 
 export const deleteNote = async (noteId: string): Promise<Note> => {
-  const response = await api.delete<Note>(`/notes/${noteId}`);
+  const response = await nextServer.delete<Note>(`/notes/${noteId}`);
   return response.data;
 };
 
@@ -57,7 +57,7 @@ export type RegisterRequest = {
 };
 
 export const register = async (payload: RegisterRequest): Promise<User> => {
-  const { data } = await api.post<User>("/auth/register", payload);
+  const { data } = await nextServer.post<User>("/auth/register", payload);
 
   return data;
 };
@@ -70,7 +70,7 @@ export type LoginRequest = {
 };
 
 export const login = async (payload: LoginRequest): Promise<User> => {
-  const { data } = await api.post<User>("/auth/login", payload, {
+  const { data } = await nextServer.post<User>("/auth/login", payload, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -80,33 +80,22 @@ export const login = async (payload: LoginRequest): Promise<User> => {
 
 // logout    для правильного виходу користувача
 export const logout = async (): Promise<void> => {
-  await api.post("/auth/logout");
+  await nextServer.post("/auth/logout");
 };
-
-
-
 
 // checkSession  Перевірка авторизації
-// type CheckSessionRequest = {
-//   success: boolean;
-// };
-
-// export const checkSession = async () => {
-//   const { data } = await api.get<CheckSessionRequest>("/auth/session");
-//   return data.success;
-// };
-
-export const checkSession = async (): Promise<User | null> => {
-  try {
-    const { data } = await api.get<User>("/auth/session");
-    return data ?? null;
-  } catch {
-    return null;
-  }
+type CheckSessionRequest = {
+  success: boolean;
 };
 
+export const checkSession = async () => {
+  const { data } = await nextServer.get<CheckSessionRequest>("/auth/session");
+  return data.success;
+};
+
+
 export const getMe = async () => {
-  const { data } = await api.get<User>("/users/me");
+  const { data } = await nextServer.get<User>("/auth/me");
   return data;
 };
 
@@ -115,6 +104,6 @@ export type UpdateMeRequest = {
 };
 
 export const updateMe = async (payload: UpdateMeRequest): Promise<User> => {
-  const { data } = await api.patch<User>("/users/me", payload);
+  const { data } = await nextServer.patch<User>("/users/me", payload);
   return data;
 };

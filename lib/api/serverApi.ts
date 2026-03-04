@@ -1,8 +1,8 @@
 import { User } from "@/types/user";
-import { api } from "./api";
+import { nextServer } from "./api";
 import { cookies } from "next/headers";
 import { Note, NoteTag } from "@/types/note";
-import { AxiosResponse } from "axios";
+
 
 interface FetchNotesResponse {
   notes: Note[];
@@ -14,9 +14,10 @@ export const fetchNotes = async (
   page: number,
   tag?: NoteTag,
 ): Promise<FetchNotesResponse> => {
-  const cookieStore = cookies();
+ 
+  const cookieStore = await cookies();
 
-  const response = await api.get<FetchNotesResponse>("/notes", {
+  const response = await nextServer.get<FetchNotesResponse>("/notes", {
 
      headers: {
       Cookie: cookieStore.toString(),
@@ -37,9 +38,9 @@ export const fetchNotes = async (
 };
 
 export const fetchNoteById = async (id: Note["id"]): Promise<Note> => {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   
-  const response = await api.get<Note>(`/notes/${id}`, {
+  const response = await nextServer.get<Note>(`/notes/${id}`, {
     headers: {
       Cookie: cookieStore.toString(),
     },
@@ -48,9 +49,9 @@ export const fetchNoteById = async (id: Note["id"]): Promise<Note> => {
 };
 
 export const getServerMe = async (): Promise<User> => {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
-  const { data } = await api.get("/users/me", {
+  const { data } = await nextServer.get("/users/me", {
     headers: {
       Cookie: cookieStore.toString(),
     },
@@ -60,18 +61,12 @@ export const getServerMe = async (): Promise<User> => {
 
 
 
-export const checkSession = async (): Promise<User | null> => {
-  const cookieStore = cookies();
-
-  try {
-    const { data } = await api.get<User>("/auth/session", {
-      headers: {
-        Cookie: cookieStore.toString(),
-      },
-    });
-   return data ?? null;
-  } catch {
-    return null;
-  }
+export const checkServerSession = async () => {
+  const cookieStore = await cookies();
+  const res = await nextServer.get("/auth/session", {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+  return res;
 };
-
