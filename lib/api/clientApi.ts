@@ -23,7 +23,7 @@ export const fetchNotes = async (
   const response = await api.get<FetchNotesResponse>("/notes", {
     params: {
       page,
-      perPage: 10,
+      perPage: 12,
       ...(searchText && { search: searchText }),
       ...(tag && { tag }),
     },
@@ -83,14 +83,26 @@ export const logout = async (): Promise<void> => {
   await api.post("/auth/logout");
 };
 
-// checkSession  Перевірка авторизації
-type CheckSessionRequest = {
-  success: boolean;
-};
 
-export const checkSession = async () => {
-  const { data } = await api.get<CheckSessionRequest>("/auth/session");
-  return data.success;
+
+
+// checkSession  Перевірка авторизації
+// type CheckSessionRequest = {
+//   success: boolean;
+// };
+
+// export const checkSession = async () => {
+//   const { data } = await api.get<CheckSessionRequest>("/auth/session");
+//   return data.success;
+// };
+
+export const checkSession = async (): Promise<User | null> => {
+  try {
+    const { data } = await api.get<User>("/auth/session");
+    return data ?? null;
+  } catch {
+    return null;
+  }
 };
 
 export const getMe = async () => {

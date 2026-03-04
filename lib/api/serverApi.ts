@@ -24,7 +24,7 @@ export const fetchNotes = async (
     
     params: {
       page,
-      perPage: 10,
+      perPage: 12,
       ...(searchText && { search: searchText }),
       ...(tag && { tag }),
     },
@@ -58,18 +58,20 @@ export const getServerMe = async (): Promise<User> => {
   return data;
 };
 
-interface CheckSessionResponse {
-  success: boolean;
-}
 
-export const checkSession = async (): Promise<
-  AxiosResponse<CheckSessionResponse>
-> => {
+
+export const checkSession = async (): Promise<User | null> => {
   const cookieStore = cookies();
 
-  return await api.get<CheckSessionResponse>("/auth/session", {
-    headers: {
-      Cookie: cookieStore.toString(),
-    },
-  });
+  try {
+    const { data } = await api.get<User>("/auth/session", {
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
+    });
+   return data ?? null;
+  } catch {
+    return null;
+  }
 };
+
