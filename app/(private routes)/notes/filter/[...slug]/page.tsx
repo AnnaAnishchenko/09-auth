@@ -1,10 +1,14 @@
+// import { fetchNotes } from '@/lib/api/serverApi';
+import { fetchNotes } from "@/lib/api/serverApi";
 
-import { fetchNotes } from '@/lib/api/serverApi';
+
+
 import type { NoteTag } from "@/types/note";
 import { QueryClient, dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import NotesClient from "./Notes.client";
 
 import type { Metadata } from "next";
+
 
 
 interface NotesByCategoryProps {
